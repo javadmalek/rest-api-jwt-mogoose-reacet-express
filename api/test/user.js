@@ -18,12 +18,6 @@ describe('Users', () => {
         password: "test123"
     };
 
-    beforeEach((done) => {
-        User.remove({}, (err) => {
-            done();
-        });
-    });
-
     describe('/POST User Registration', () => {
         it('it should CREATE a User.', (done) => {
             chai.request(app)
@@ -55,21 +49,20 @@ describe('Users', () => {
                 })
         });
 
-        // it('it should NOT CREATE a User because of duplicate email.', (done) => {
-        //     chai.request(app)
-        //         .post('/api/users/signup')
-        //         .send(correctUser)
-        //         .end((err, res) => {
-        //             console.log(res.body);
-        //             res.should.have.status(200);
-        //             res.body.should.be.a('object');
-        //             res.body.should.have.property('success');
-        //             res.body.success.should.be.equal(false);
-        //             res.body.should.have.property('msg');
-        //             res.body.msg.should.be.equal('Username already exists.');
-        //             res.body.should.have.property('error');
-        //             done();
-        //         })
-        // });
+        it('it should NOT CREATE a User because of duplicate email.', (done) => {
+            chai.request(app)
+                .post('/api/users/signup')
+                .send(correctUser)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('success');
+                    res.body.success.should.be.equal(false);
+                    res.body.should.have.property('msg');
+                    res.body.msg.should.be.equal('Username already exists.');
+                    res.body.should.have.property('error');
+                    done();
+                })
+        });
     });
 });
